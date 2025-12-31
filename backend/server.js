@@ -3,9 +3,12 @@ const app=express();
 const mongoose=require("mongoose");
 const user = require("./models/userModel.js");
 const product = require("./models/productModel.js");
-const router = require("./routes/productRoutes.js")
-
+const productRouter = require("./routes/productRoutes.js")
 dbUrl='mongodb://127.0.0.1:27017/ummas-kitchen';
+const cors=require ("cors");
+
+app.use(cors());
+app.use(express.json());
 
 main()
 .then(()=>{
@@ -36,9 +39,8 @@ app.get("/save", async (req,res)=>{
         res.send("data saved successfully")
 });
 
-// app.use("/products",router);
+ app.use("/",productRouter);
 
-app.use("/products", require("./routes/productRoutes"));
 app.get('/',(req,res) => {
     res.send("hi this is me your root page");
 })
