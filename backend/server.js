@@ -31,8 +31,8 @@ app.get("/save", async (req,res)=>{
         // })
         // user1.save();
         const product1= new product({
-            title : "phone",
-            price : 12350,
+            title : "phones",
+            price : 90789,
             description : " This is a very new model form ****, Good and Iconic"
         })
         product1.save();
