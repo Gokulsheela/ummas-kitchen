@@ -2,7 +2,7 @@ import axios from "axios";
 import ProductCard from "../components/product/ProductCard";
 import { useEffect, useState } from "react";
 
-function Home() {
+function Index() {
   const [products ,setProducts] = useState([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -13,14 +13,15 @@ function Home() {
   }, []);
 
   return (
-     <div>
-      <h1>Products</h1>
+    <>
+    <h1>Products</h1>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ml-2">
       {products.map(product => (
         <ProductCard key={product._id} product={product}/>
-          
       ))}
   </div>
+  </>
   );
 
 }
-export default Home;
+export default Index;
