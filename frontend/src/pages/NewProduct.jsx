@@ -1,7 +1,7 @@
 import axios, { formToJSON } from "axios";
 import {useState , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-
+import { createProduct } from "../api/productApi.js"
 function NewProduct() {
     const navigate = useNavigate();
     let [ formData, setFormData ] = useState({
@@ -17,7 +17,7 @@ function NewProduct() {
     }
     const HandlingSubmit = async(event)=> {
         event.preventDefault();
-          await axios.post("http://localhost:3000/product/new",formData);
+          await createProduct(formData);
          console.log(formData,"hu");
          console.log("fomr");
         setFormData({title :"",

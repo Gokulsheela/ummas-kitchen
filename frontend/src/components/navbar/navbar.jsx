@@ -15,7 +15,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <div className="text-xl font-semibold tracking-wide">
-            Umma's Kitchen
+            <Link to="/" className="hover:text-black">Umma's Kitchen</Link>
           </div>
 
           {/* Desktop links */}
