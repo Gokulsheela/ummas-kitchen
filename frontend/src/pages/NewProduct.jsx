@@ -1,63 +1,111 @@
-import axios, { formToJSON } from "axios";
-import {useState , useEffect} from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createProduct } from "../api/productApi.js"
+import { createProduct } from "../api/productApi.js";
+
 function NewProduct() {
-    const navigate = useNavigate();
-    let [ formData, setFormData ] = useState({
-        title :"",
-        price :"",
-        image :"",
-        description :""
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    title: "",
+    price: "",
+    image: "",
+    description: "",
+  });
+
+  const HandlingForm = (event) => {
+    setFormData((currData) => {
+      return { ...currData, [event.target.name]: event.target.value };
     });
-    const HandlingForm = (event)=> {
-        setFormData((currData)=> {
-            return {...currData, [event.target.name ]:event.target.value}
-        })
-    }
-    const HandlingSubmit = async(event)=> {
-        event.preventDefault();
-          await createProduct(formData);
-         console.log(formData,"hu");
-         console.log("fomr");
-        setFormData({title :"",
-        price :"",
-        image :"",
-        description :""});
-        navigate("/");
-    }
-    return (
-        <>
-        <h1>ADD NEW LISTING</h1><br></br>
-   <form onSubmit={HandlingSubmit}>
-    <input className="border"
-        placeholder="Product Name"
-        value={formData.name}
-        type="text"
-        name="title"
-        onChange={HandlingForm}
-    /> <br></br>
-    <input className="border"
-        placeholder="select your file" 
-        value={formData.image}
-        name="image"
-        onChange={HandlingForm}
-        type="text"/><br></br>
-    <input className="border"
-        placeholder="price"
-        value={formData.price}
-        name="price"
-        onChange={HandlingForm}
-        type="number"/><br></br><br></br>
-    <textarea className="border h=12" 
-        value={formData.description}
-        name="description"
-        onChange={HandlingForm}
-        placeholder="write the product description here"
-    /><br></br>
-    <button type="submit" className="border">Enter</button>
-   </form>
-        </>
-    )
+  };
+
+  const HandlingSubmit = async (event) => {
+    event.preventDefault();
+
+    await createProduct(formData);
+
+    setFormData({
+      title: "",
+      price: "",
+      image: "",
+      description: "",
+    });
+
+    navigate("/");
+  };
+
+  return (
+    <div className="max-w-lg mx-auto mt-12 bg-white shadow-lg rounded-lg p-8">
+
+      <h1 className="text-2xl font-bold mb-6 text-center">
+        Add New Product
+      </h1>
+
+      <form onSubmit={HandlingSubmit} className="space-y-4">
+
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Product Name
+          </label>
+          <input
+            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Product Name"
+            value={formData.title}
+            type="text"
+            name="title"
+            onChange={HandlingForm}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Image URL
+          </label>
+          <input
+            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Paste image url"
+            value={formData.image}
+            name="image"
+            type="text"
+            onChange={HandlingForm}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Price
+          </label>
+          <input
+            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            name="price"
+            value={formData.price}
+            type="number"
+            onChange={HandlingForm}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Description
+          </label>
+          <textarea
+            className="w-full border rounded px-3 py-2 h-28 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={formData.description}
+            name="description"
+            onChange={HandlingForm}
+            placeholder="Write the product description here"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          Add Product
+        </button>
+
+      </form>
+    </div>
+  );
 }
+
 export default NewProduct;

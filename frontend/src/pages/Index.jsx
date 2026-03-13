@@ -2,7 +2,7 @@
 import ProductCard from "../components/product/ProductCard.jsx";
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/productApi.js";
-import ErrorMessage from "./ErrorMessage.jsx";
+import ErrorMessage from "../components/product/ErrorMessage.jsx";
 
 function Index() {
   const [products ,setProducts] = useState([]);
