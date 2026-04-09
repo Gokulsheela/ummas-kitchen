@@ -8,35 +8,51 @@ const ExpressError = require("../utils/ExpressError.js");
 
 module.exports.index = (async (req,res)=>{
     const products = await product.find();
-    if(!products){
-        throw new ExpressError(404,"product not found");
-    }
-     res.json(products)
+     res.status(200).json({
+        success:true,
+        data:products
+     });
 });
 
 module.exports.new = (async(req,res)=>{
     const newProduct = new product(req.body);
     await newProduct.save();
-    res.json({ message: "Product saved successfully" });
+    res.status(201).json({ 
+        sucess: true,
+        message: "Product saved successfully" });
 
 });
 
 module.exports.showProduct = (async(req,res)=> {
     const { id } = req.params;
     const item = await product.findById(id) ;
-    res.json(item);
+    if(!item){
+        throw new ExpressError(404,"Product Not Found");
+    }
+    res.status(200).json({
+        sucess : true,
+        data : item
+    });
 })
 
 module.exports.updateProduct = (async(req,res)=> {
     const { id } = req.params;
    const updateProduct = await product.findByIdAndUpdate(id,{...req.body});
-   console.log(updateProduct);
-    res.json({ message: "Product saved successfully" });
+
+   if(!updateProduct){
+    throw new ExpressError(404,"Product Not Found");
+   }
+
+    res.status(200).json({ 
+        sucess : true,
+        message: "Product saved successfully" });
 });
 
 module.exports.destroyProduct = (async(req,res)=> {
     const { id } = req.params;
-    console.log(id);
-    await product.findByIdAndDelete(id);
+   const deleted = await product.findByIdAndDelete(id);
+   if(!deleted){
+    throw new ExpressError(404,"Product NOt Found");
+   }
     res.json({ message: "Product deleted successfully" })
 })

@@ -3,6 +3,7 @@ import { useState, useEffect  } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { getProductById, deleteProduct } from "../api/productApi.js";
+import { toast } from "react-toastify" ;
 
 
 export default function ProductDetails() {
@@ -28,8 +29,14 @@ export default function ProductDetails() {
         navigate(`/edit/${productInfo._id}`);
     }
     const buttonsClickDelete = async()=> {
-        await deleteProduct(id);
+        try {
+          await deleteProduct(id);
+          toast.success("Listing Deleted Successfully");
         navigate(`/`);
+        } catch(err){
+          toast.error(err);
+        }
+        
     }
 
     if (!productInfo){
@@ -51,8 +58,7 @@ export default function ProductDetails() {
       {/* Product Image */}
       <div className="bg-gray-50 flex items-center justify-center p-8">
         <img
-          src={productInfo.image.url}
-          alt="Product"
+           src={productInfo?.image?.url} alt={productInfo?.title} 
           className="w-full max-w-sm rounded-xl shadow object-cover"
         />
       </div>

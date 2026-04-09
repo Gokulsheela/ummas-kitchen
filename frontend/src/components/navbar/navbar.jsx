@@ -1,11 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { logoutUser } from "../../api/authenticationApi.js"; 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggelMenu = ()=> setMenuOpen(!menuOpen);
   const handelItemClicked = ()=> setMenuOpen(false);
   const cartCount = 2;
+  const handleLogut = ()=>{
+    try{
+         logoutUser();
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b">
@@ -21,9 +30,11 @@ export default function Navbar() {
           {/* Desktop links */}
           <div className="hidden md:flex space-x-6 text-sm">
             <Link to="/new" className="hover:text-black">NewListing</Link>
-            <a className="hover:text-black">Women</a>
-            <a className="hover:text-black">Men</a>
-            <a className="hover:text-black">Sale</a>
+            <button className="hover:text-black"
+              onClick={handleLogut}
+            >Logut</button>
+            <Link to="/signup" className="hover:text-black">SignUp</Link>
+            <Link to="/login" className="hover:text-black">Login</Link>
           </div>
 
           {/* Actions */}
@@ -38,15 +49,17 @@ export default function Navbar() {
 
             {/* Cart */}
             <div className="relative cursor-pointer">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {/* <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6H19" />
-              </svg>
+              </svg> */}
               {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full px-1">
-                  {cartCount}
+                  {/* {cartCount} */} guest
                 </span>
               )}
+              {/* <span>profile</span> */}
+
             </div>
 
             {/* Mobile menu */}
@@ -68,9 +81,9 @@ export default function Navbar() {
               placeholder="Search products"
               className="w-full border rounded-md px-3 py-2"
             />
-            <a className="block">Login</a>
-            <a className="block">Signup</a>
             <Link to="/new" className="block" onClick={handelItemClicked}>NewListing</Link>
+            <Link to="/signup" className="block" onClick={handelItemClicked}>SignUp</Link>
+            <Link to="/login" className="block" onClick={handelItemClicked}>Login</Link>
             <a className="block">Women</a>
           </div>
         )}

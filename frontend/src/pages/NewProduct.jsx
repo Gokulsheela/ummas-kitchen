@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createProduct } from "../api/productApi.js";
+import { toast } from "react-toastify";
 
 function NewProduct() {
   const navigate = useNavigate();
-
+  const [ loading, setLoading ] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     price: "",
@@ -20,8 +21,11 @@ function NewProduct() {
 
   const HandlingSubmit = async (event) => {
     event.preventDefault();
-
-    await createProduct(formData);
+    try{
+        setLoading(true);
+        // await new Promise(resolve => setTimeout(resolve, 3000));
+      await createProduct(formData);
+    toast.success("Product updated successfully");
 
     setFormData({
       title: "",
@@ -31,6 +35,12 @@ function NewProduct() {
     });
 
     navigate("/");
+    } catch(err){
+      console.log(err);
+    } finally{
+      setLoading(false);
+    }
+    
   };
 
   return (
@@ -98,9 +108,10 @@ function NewProduct() {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:bg-gray-400"
         >
-          Add Product
+          {loading ? "Adding product " : "Add product"}
         </button>
 
       </form>
