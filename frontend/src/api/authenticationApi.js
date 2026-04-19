@@ -1,14 +1,15 @@
 import axiosClient from "./axiosClient";
 
 export const createSignupUser = async(formData)=> {
-     const {data }= await axiosClient.post("/signup",formData);
+     const {data }= await axiosClient.post("/auth/signup",formData);
      return data;
 }
 export const loginUser = async(formData)=>{
-     const {data} = await axiosClient.post("/login",formData);
-     localStorage.setItem("accessToken",data.acessToken);
+     console.log("Sending login request", formData);
+     const {data} = await axiosClient.post("/auth/login",formData);
+     localStorage.setItem("accessToken",data.accessToken);
      localStorage.setItem("refreshToken",data.refreshToken);
-      console.log("refresh token:", data.refreshToken, "access token",data.acessToken);
+     console.log(localStorage);
 
      return data;
 }

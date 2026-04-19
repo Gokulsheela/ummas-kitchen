@@ -1,12 +1,17 @@
+ require("dotenv").config({ debug: true });
+
 const express=require('express');
 const app=express();
 const mongoose=require("mongoose");
 const user = require("./models/userModel.js");
 const product = require("./models/productModel.js");
 const productRouter = require("./routes/productRoutes.js")
+const authRouter = require("./routes/authRoutes.js")
 dbUrl='mongodb://127.0.0.1:27017/ummas-kitchen';
 const cors=require ("cors");
 const ExpressError = require("./utils/ExpressError");
+
+
 
 app.use(cors());
 app.use(express.json());
@@ -22,7 +27,7 @@ async function main(){
     await mongoose.connect(dbUrl);
 };
 
-
+console.log("env check",process.env.JWT_SECRET);
 app.get("/save", async (req,res)=>{
     
         // const user1 = new user({
@@ -40,7 +45,11 @@ app.get("/save", async (req,res)=>{
         res.send("data saved successfully")
 });
 
+
  app.use("/",productRouter);
+ app.use("/auth",authRouter);
+
+
 
 // app.get('/',(req,res) => {
 //     res.send("hi this is me your root page");

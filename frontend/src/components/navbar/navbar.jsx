@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../../api/authenticationApi.js"; 
+import { toast } from "react-toastify";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -9,7 +10,9 @@ export default function Navbar() {
   const cartCount = 2;
   const handleLogut = ()=>{
     try{
-         logoutUser();
+         localStorage.removeItem("accessToken");
+         localStorage.removeItem("refreshToken");
+         toast.success("Logout Successfully");
     }
     catch(err){
       console.log(err);

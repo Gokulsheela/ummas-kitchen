@@ -11,6 +11,7 @@ router.get("/product/:id",wrapAsync(controller.showProduct));
 router.put("/product/:id/update",wrapAsync(controller.updateProduct));
 router.delete("/product/:id",wrapAsync(controller.destroyProduct));
 
-router.post("/signup",wrapAsync(authController.createSignupUser))
-router.post("/login",wrapAsync(authController.loginUser))
+// router.post("/signup",wrapAsync(authController.createSignupUser));
+// router.post("/login",wrapAsync(authController.loginUser));
+// router.post("/refresh",wrapAsync(authController.refreshToken));
 module.exports = router;
