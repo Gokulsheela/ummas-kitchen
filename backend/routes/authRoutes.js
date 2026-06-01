@@ -7,4 +7,6 @@ const { protect } = require("../middleware/authMiddleware.js");
 router.post("/signup",wrapAsync(authController.createSignupUser));
 router.post("/login",wrapAsync(authController.loginUser));
 router.post("/refresh",wrapAsync(authController.refreshToken));
+router.post("/logut",wrapAsync(authController.logoutUser));
+router.get("/me",protect,wrapAsync(authController.getCurrentUser));
 module.exports = router;

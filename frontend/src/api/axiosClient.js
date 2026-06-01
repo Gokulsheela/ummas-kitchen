@@ -2,56 +2,57 @@ import axios from "axios";
 
 const axiosClient = axios.create({
   baseURL: "http://localhost:3000",
+  withCredentials: true,
   timeout: 5000
 });
 
-axiosClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
-    console.log("TOKEN IN INTERCEPTOR:", token);
-     
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
 
 let isRefreshing = false;
-let failedQueue = [];
+let queue = [];
 
 const processQueue = (error, token = null) => {
-  failedQueue.forEach(prom => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
+  queue.forEach((p) => {
+    error ? p.reject(error) : p.resolve(token);
   });
-  failedQueue = [];
+  queue = [];
 };
 
-axiosClient.interceptors.response.use(
-  (response) => response,
+axiosClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
 
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+axiosClient.interceptors.response.use(
+  (res) => res,
   async (error) => {
-    console.log("response interceptor");
+    console.log(error.response.data);
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 &&
-        error.response?.data?.code === "TOKEN_EXPIRED" &&
-        !originalRequest._retry) {
+    if (!error.response) return Promise.reject(error);
+
+    const { status, data } = error.response;
+
+    // 🔥 ONLY auth logic here
+    if (status === 401 && data.code === "TOKEN_EXPIRED") {
+      if (originalRequest._retry) {
+        return Promise.reject(error);
+      }
 
       if (isRefreshing) {
-        // queue requests while refreshing
         return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        }).then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return axiosClient(originalRequest);
+          queue.push({
+            resolve: (token) => {
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+              resolve(axiosClient(originalRequest));
+            },
+            reject,
+          });
         });
       }
 
@@ -59,25 +60,22 @@ axiosClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        
-        const res = await axiosClient.post("/refresh", {
-          refreshToken
-        });
+        const res = await axiosClient.post("/auth/refresh", {},{
+          withCredentials: true
+      });
+       
+        const newToken = res.data.accessToken;
 
-        const newAccessToken = res.data.accessToken;
+        localStorage.setItem("accessToken", newToken);
 
-        localStorage.setItem("accessToken", newAccessToken);
+        processQueue(null, newToken);
 
-        processQueue(null, newAccessToken);
-
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
         return axiosClient(originalRequest);
-
       } catch (err) {
-        processQueue(err, null);
-        console.log("no access token");
+        processQueue(err);
+
         localStorage.clear();
         window.location.href = "/login";
 

@@ -1,4 +1,4 @@
-import axiosClient from "./axiosClient";
+import axiosClient from "../../api/axiosClient";
 
 export const createSignupUser = async(formData)=> {
      const {data }= await axiosClient.post("/auth/signup",formData);
@@ -13,6 +13,15 @@ export const loginUser = async(formData)=>{
 
      return data;
 }
-export const logoutUser = ()=> {
-     localStorage.setItem("token",null);
+export const logoutUser = async()=> {
+
+    const res= await axiosClient.post("/auth/logut");
+    console.log(res);
+  
+};
+
+export const getCurrentUser = async()=> {
+     const res = await axiosClient.get("/auth/me");
+     return res.data;
+     console.log(res.data);
 }

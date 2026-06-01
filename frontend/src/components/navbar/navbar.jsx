@@ -1,18 +1,23 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { logoutUser } from "../../api/authenticationApi.js"; 
+import { Link, useNavigate } from "react-router-dom"; 
 import { toast } from "react-toastify";
+import { logoutUser } from "../../features/auth/api";
+import { useAuth } from "../../context/AuthContext";
 export default function Navbar() {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const { logout, user } = useAuth();
   const toggelMenu = ()=> setMenuOpen(!menuOpen);
   const handelItemClicked = ()=> setMenuOpen(false);
   const cartCount = 2;
-  const handleLogut = ()=>{
+  const handleLogut = async ()=>{
     try{
+       await logout();
+     
          localStorage.removeItem("accessToken");
          localStorage.removeItem("refreshToken");
          toast.success("Logout Successfully");
+         navigate("/login", { replace: true }); //revent the user from going back to protected pages using the browser back button
     }
     catch(err){
       console.log(err);
@@ -58,7 +63,7 @@ export default function Navbar() {
               </svg> */}
               {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full px-1">
-                  {/* {cartCount} */} guest
+                  {/* {cartCount} */} {user?.email}
                 </span>
               )}
               {/* <span>profile</span> */}

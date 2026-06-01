@@ -2,7 +2,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useState , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import { updateProduct ,getProductById} from "../api/productApi.js"
+import { updateProduct ,getProductById} from "../api"
 export default function EditformData() {
     const [ formData, setFormData ] = useState({
             title:"",

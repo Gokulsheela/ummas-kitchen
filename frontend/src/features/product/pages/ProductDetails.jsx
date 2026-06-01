@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect  } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { getProductById, deleteProduct } from "../api/productApi.js";
+import { getProductById, deleteProduct } from "../api";
 import { toast } from "react-toastify" ;
 
 

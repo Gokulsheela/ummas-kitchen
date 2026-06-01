@@ -1,34 +1,54 @@
 const jwt = require("jsonwebtoken");
+const ExpressError = require("../utils/ExpressError");
 
 module.exports.protect = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+
+    throw new ExpressError (
+      401,
+      "NO_TOKEN",
+      "Athueraization required",
+      {
+        authorization : "Authorization header is missing"
+      }
+    )
+}
+
+if (!authHeader.startsWith("Bearer ")) {
   
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-  code: "NO_TOKEN",
-  message: "No token provided",
-});
+  throw new ExpressError(
+    401,
+    "INVALID_FORMAT",
+    "Invalid Authorization format",
+    {
+      authorization : "Authorization header must start with bearer"
     }
+  )
+}
 
-    const token = authHeader.split(" ")[1];
-    console.log("TOKEN", token);
+const token = authHeader.split(" ")[1];
 
-    if (!token) {
-      return res.status(401).json({ code: "TOKEN_EXPIRED" });
-    }
+if (!token) {
+  throw new ExpressError(
+  401,
+  "INVALID_TOKEN_FORMAT",
+  "inavlid token format",
+  {
+    authorization : "Beare token is missing"
+  }
+  );
+};
 
-    const decoded = jwt.verify(token, "ACCESS_SECRET");
-    console.log(decoded);
-
-    req.user = decoded;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  req.user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({
-      message: "Not authorized", 
-      code:"TOKEN_EXPIRED",
-
-    });
+    throw new ExpressError(
+      401,
+      "NO_REFRSH_TOKEN"
+    )
   }
 };

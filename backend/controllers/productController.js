@@ -8,6 +8,7 @@ const ExpressError = require("../utils/ExpressError.js");
 
 module.exports.index = (async (req,res)=>{
     const products = await product.find();
+   
      res.status(200).json({
         success:true,
         data:products
@@ -15,8 +16,11 @@ module.exports.index = (async (req,res)=>{
 });
 
 module.exports.new = (async(req,res)=>{
+    console.log("newListing controller");
     const newProduct = new product(req.body);
-    await newProduct.save();
+    console.log(newProduct);
+   await newProduct.save();
+  
     res.status(201).json({ 
         sucess: true,
         message: "Product saved successfully" });

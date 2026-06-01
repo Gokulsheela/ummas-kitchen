@@ -1,8 +1,9 @@
 // import axios from "axios";
-import ProductCard from "../components/product/ProductCard.jsx";
+import ProductCard from "../components/ProductCard.jsx";
 import { useEffect, useState } from "react";
-import { getProducts } from "../api/productApi.js";
-import ErrorMessage from "../components/product/ErrorMessage.jsx";
+import { getProducts } from "../api.js";
+import BottomNav from "../../../components/navbar/ui/navigation/BottomNav.jsx";
+// import ErrorMessage from "../components/";
 
 function Index() {
   const [products ,setProducts] = useState([]);
@@ -23,7 +24,7 @@ function Index() {
     fetchProducts();
   }, []);
     if (loading) return <p>Loading....</p>;
-    if (error) return <ErrorMessage message={error}/>
+    // if (error) return <ErrorMessage message={error}/>
     
     
 
@@ -35,6 +36,7 @@ function Index() {
         <ProductCard key={product._id} product={product}/>
       ))}
   </div>
+  <BottomNav/>
   </>
   );
 

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createProduct } from "../api/productApi.js";
+import { createProduct } from "../api";
 import { toast } from "react-toastify";
-
 function NewProduct() {
   const navigate = useNavigate();
   const [ loading, setLoading ] = useState(false);
