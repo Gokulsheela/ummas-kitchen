@@ -41,14 +41,27 @@ if (!token) {
   }
   );
 };
-
+console.log("Received token:", token);
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   req.user = decoded;
     next();
   } catch (error) {
-    throw new ExpressError(
+    console.log("<----error---",error);
+    if(error.name === "TokenExpiredError"){
+      throw new ExpressError(
       401,
-      "NO_REFRSH_TOKEN"
-    )
+      "TOKEN_EXPIRED",
+      "Access Token Expired"
+    );
+    }
+    if( error.name == "JsonWebTokenError"){
+      throw new ExpressError (
+        401,
+        "INVALID_TOKEN",
+        "Invalid token"
+      );
+    }
+      throw error;
   }
+
 };
