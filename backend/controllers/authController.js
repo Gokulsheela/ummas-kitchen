@@ -233,8 +233,8 @@
 
 const bcrypt = require("bcrypt");
 
-const User = require("../models/userModel.js");
-const RefreshToken = require("../models/refreshTokenModel.js");
+const User = require("../models/auth/userModel.js");
+const RefreshToken = require("../models/auth/refreshTokenModel.js");
 
 const {
   generateAccessToken,

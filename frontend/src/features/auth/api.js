@@ -23,5 +23,5 @@ export const logoutUser = async()=> {
 export const getCurrentUser = async()=> {
      const res = await axiosClient.get("/auth/me");
      return res.data;
-     console.log(res.data);
+     // console.log(res.data);
 }

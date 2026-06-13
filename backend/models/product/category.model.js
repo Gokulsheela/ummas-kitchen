@@ -19,8 +19,8 @@ const categorySchema = new Schema({
         ref: "category",
         default: null
     },
-    image:
-        "https://example.com/categories/men.jpg",
+    // image:
+    //     "https://example.com/categories/men.jpg",
 
     isActive: {
         type: Boolean,

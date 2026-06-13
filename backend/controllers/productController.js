@@ -1,10 +1,12 @@
-const product = require("../models/productModel.js");
+const product2 = require("../models/product/product.model.js");
+const catagory = require("../models/product/category.model.js");
+const product = require("../models/product/product.model.js");
 const ExpressError = require("../utils/ExpressError.js");
-// const getProducts = async (req,res) => {
-//     const products = await product.find();
-//     // res.json(products);
-//     res.send("hi this is products listings")
-// };
+const getProducts = async (req,res) => {
+    const products = await product.find();
+    // res.json(products);
+    res.send("hi this is products listings")
+};
 
 module.exports.index = (async (req,res)=>{
     const products = await product.find();
@@ -16,8 +18,26 @@ module.exports.index = (async (req,res)=>{
 });
 
 module.exports.new = (async(req,res)=>{
-    console.log("newListing controller");
-    const newProduct = new product(req.body);
+    console.log("req.file:", req.file);
+console.log("req.files:", req.files);
+console.log("content-type:", req.headers["content-type"]);
+
+    const thumbnail = req.files.thumbnail?.[0]
+            ? {
+                url: `/uploads/${req.files.thumbnail[0].filename}`,
+            altText: req.body.title || ""
+            } : null ;
+
+    const gallery = req.files.gallery?.map(file => ({
+        url: `/uploads/${file.filename}`,
+        altText: req.body.title || ""
+    })) || [];
+
+    const newProduct = new product({
+        ...req.body,
+        thumbnail,
+        gallery
+    });
     console.log(newProduct);
    await newProduct.save();
   

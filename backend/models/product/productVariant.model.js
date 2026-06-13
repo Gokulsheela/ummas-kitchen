@@ -27,7 +27,7 @@ const productVariantSchema = new Schema(
             trim: true
         },
 
-        price: priceSchema,
+        // price: priceSchema,
 
         stockQunanity: {
             type: Number,
@@ -44,7 +44,7 @@ const productVariantSchema = new Schema(
             default: 0,
             min: 0
         },
-        images: imageSchema,
+        // images: imageSchema,
         
         isActive: {
             type: Boolean,

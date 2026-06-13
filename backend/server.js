@@ -4,7 +4,7 @@ const express=require('express');
 const app=express();
 const mongoose=require("mongoose");
 
-const user = require("./models/userModel.js");
+const user = require("./models/auth/userModel.js");
 const product = require("./models/productModel.js");
 
 const productRouter = require("./routes/productRoutes.js")

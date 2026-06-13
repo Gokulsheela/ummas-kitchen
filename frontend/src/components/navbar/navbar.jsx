@@ -10,6 +10,9 @@ export default function Navbar() {
   const toggelMenu = ()=> setMenuOpen(!menuOpen);
   const handelItemClicked = ()=> setMenuOpen(false);
   const cartCount = 2;
+
+  console.log("user",user);
+
   const handleLogut = async ()=>{
     try{
        await logout();

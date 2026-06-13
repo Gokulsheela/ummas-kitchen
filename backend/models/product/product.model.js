@@ -27,7 +27,7 @@ const productSchema = new Schema(
         categoryId: {
             type: Schema.Types.ObjectId,
             ref: "Category",
-            required: true
+            // required: true
         },
         brand: {
             type: String,
@@ -36,9 +36,9 @@ const productSchema = new Schema(
         },
         tags:[String],
         
-        thumbnail: imageSchema,
+        // thumbnail: imageSchema,
 
-        gallery: imageSchema,
+        // gallery: imageSchema,
 
         material: {
             type: String,
@@ -68,7 +68,7 @@ const productSchema = new Schema(
         default: "draft"
        },
        
-       seo: seoSchema,   
+    //    seo: seoSchema,   
     },
     {
         timestamps: true,
