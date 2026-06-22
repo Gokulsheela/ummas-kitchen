@@ -1,5 +1,6 @@
+
 import axiosClient from "../../api/axiosClient";
-const token = localStorage.getItem("token");
+
 
 export const getProducts = async () => {
 
@@ -14,6 +15,7 @@ export const getProductById = async (id) => {
 }
 
 export const createProduct = async (product) => {
+  const token = localStorage.getItem("token");
   const { data } = await axiosClient.post("/product/new", product,{
     headers: {
       Authorization: `Bearer ${token}`
@@ -31,5 +33,11 @@ export const updateProduct = async (id, product) => {
 
 export const deleteProduct = async (id) => {
   const { data } = await axiosClient.delete(`product/${id}`)
+  return data
+}
+
+export const createProductCategory = async (product)=> {
+  const {data} = await axiosClient.post("/newProductCategory",product);
+ 
   return data
 }

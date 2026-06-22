@@ -6,8 +6,12 @@ const authController= require("../controllers/authController.js");
 const { protect } = require("../middleware/authMiddleware.js");
 const uploadImage = require("../middleware/imageUpload.js");
 
-
 router.get("/products",(controller.index));
+router.get("/category",(controller.getCategory));
+router.post("/newProductCategory",
+    uploadImage.fields([
+        {name: "thumbnail",maxCount:1},
+    ]),(controller.newProductCategory));
 router.post("/product/new",protect,
     uploadImage.fields([
         {name: "thumbnail",maxCount:1},

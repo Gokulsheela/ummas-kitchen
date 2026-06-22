@@ -7,7 +7,7 @@ export default function NewProductForm() {
     slug: "",
     shortDescription: "",
     description: "",
-    categoryId: "",
+    category: "",
     brand: "ummas'kitchen",
     tags: "",
     material: "100% cotton",
@@ -54,7 +54,7 @@ export default function NewProductForm() {
       }
     );
 
-    console.log(response.data);
+    // console.log(response.data);
   } catch (err) {
     console.error(err);
   }
@@ -129,14 +129,17 @@ export default function NewProductForm() {
               <label className="mb-2 block font-medium">
                 Category ID
               </label>
-              <input
-                type="text"
-                name="categoryId"
-                value={formData.categoryId}
+              <select
+                name="category"
+                value={formData.category}
                 onChange={handleChange}
-                placeholder="Category ID"
                 className="w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-black"
-              />
+              >
+                <option value="">Select Category</option>
+                <option value="Men">Men Category</option>
+                <option value="Women">Women Category</option>
+                <option value="Kids">Kids Category</option>
+              </select>
             </div>
 
             <div>

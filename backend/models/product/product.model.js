@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const imageSchema = require('../../schemas/image.schema');
+
 const productSchema = new Schema(
     {
         title: {
@@ -36,9 +38,9 @@ const productSchema = new Schema(
         },
         tags:[String],
         
-        // thumbnail: imageSchema,
+        thumbnail: imageSchema,
 
-        // gallery: imageSchema,
+        gallery: imageSchema,
 
         material: {
             type: String,

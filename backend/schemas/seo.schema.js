@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 const seoSchema = new Schema({
     metTitle: {
         type: String,

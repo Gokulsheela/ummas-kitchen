@@ -3,6 +3,7 @@
 const express=require('express');
 const app=express();
 const mongoose=require("mongoose");
+const path = require("path");
 
 const user = require("./models/auth/userModel.js");
 const product = require("./models/productModel.js");
@@ -45,6 +46,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+app.use("/uploads",express.static(path.join(__dirname,"uploads")));
 
 //logger optional
 app.use((req, res, next) => {

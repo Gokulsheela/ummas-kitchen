@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const imageSchema = require('../../schemas/image.schema');
+
 const categorySchema = new Schema({
     name: {
         type: String,
@@ -19,9 +21,8 @@ const categorySchema = new Schema({
         ref: "category",
         default: null
     },
-    // image:
-    //     "https://example.com/categories/men.jpg",
-
+    thumbnail: imageSchema,
+    
     isActive: {
         type: Boolean,
         default: true
