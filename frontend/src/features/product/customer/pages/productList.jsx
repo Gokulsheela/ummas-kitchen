@@ -1,19 +1,20 @@
 // import axios from "axios";
-import CategoryCard from "../components/categoryCard.jsx";
+import ProductCard from "../components/ProductCard.jsx";
 import { useEffect, useState } from "react";
-import { getCategory } from "./api/categoryApi.js";
-import BottomNav from "../../../components/navbar/ui/navigation/BottomNav.jsx";
+import { getProducts } from "../api/productApi.js";
+import BottomNav from "../../../../shared/components/BottomNav.jsx";
 // import ErrorMessage from "../components/";
 
-function Category() {
-  const [category ,setCategory] = useState([]);
+function Index() {
+  const [products ,setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const fetchCategory = async () => {
+    const fetchProducts = async () => {
       try{
-          const data = await getCategory();
-            setCategory(data)
+          const data = await getProducts();
+            setProducts(data)
+           
       } catch(err){
         console.log(err);
         setError(err);
@@ -21,7 +22,7 @@ function Category() {
         setLoading(false);
       } 
     };
-    fetchCategory();
+    fetchProducts();
   }, []);
     if (loading) return <p>Loading....</p>;
     // if (error) return <ErrorMessage message={error}/>
@@ -30,10 +31,10 @@ function Category() {
 
   return (
     <>
-    <h1>Category</h1>
+    <h1>Products</h1>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ml-2">
-      {category.map(category => (
-        <CategoryCard key={category._id} category={category}/>
+      {products.map(product => (
+        <ProductCard key={product._id} product={product}/>
       ))}
   </div>
   <BottomNav/>
@@ -41,4 +42,4 @@ function Category() {
   );
 
  }
-export default Category;
+export default Index;

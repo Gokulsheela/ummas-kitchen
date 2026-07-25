@@ -342,7 +342,7 @@ module.exports.loginUser = async (req, res) => {
   const user = await User
     .findOne({ email })
     .select("+passwordHash");
-
+  console.log("----user",user);
   // invalid credentials
   if (
     !user ||
@@ -386,7 +386,8 @@ module.exports.loginUser = async (req, res) => {
 
   return res.status(200).json({
     success: true,
-    accessToken
+    data: user,
+    accessToken,
   });
 
 };

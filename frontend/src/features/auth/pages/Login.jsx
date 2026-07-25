@@ -1,60 +1,7 @@
-// import { useState } from "react";
-// import { loginUser } from "../api";
-// export default function Login(){
-//     const [formData, setFormData] = useState({
-//         email:"",
-//         password:""
-//     });
-//     const handlingSubmit = async(event)=>{
-//             event.preventDefault();
-//             try{
-//                 const response = await loginUser(formData);
-//                 console.log(response.message);
-//                 setFormData({
-//                     email:"",
-//                     password:""
-//                 })
-//             }
-//             catch(err){
-//                 console.log(err);
-//             }
-//     }   
-//     const handlingForm = (event)=> {
-//             setFormData((currData)=>{
-//                 return {...currData,[event.target.name]:event.target.value}
-//             })
-//     }
-//     return(
-//         <>
-//         <div>
-//             <form onSubmit={handlingSubmit}>
-//                 <div>
-//                     <label>email</label>
-//                     <input className="border"
-//                         placeholder="email"
-//                         name="email"
-//                         value={formData.email}
-//                         onChange={handlingForm}>
-//                     </input>
-//                 </div>
-//                     <div>
-//                         <label>Password</label>
-//                          <input className="border"
-//                         type="password"
-//                         name="password"
-//                         value={formData.password}
-//                         onChange={handlingForm}>
-//                          </input>
-//                     </div>
-//                     <button className="border">Login</button>
-//             </form>
-//         </div>
-//         </>
-//     )
-// }
+
 
 import { useState } from "react";
-import { loginUser } from "../api";
+import { loginUser } from "../api/authApi";
 import { getErrorData } from "../../../utils/errorMessage";
 import { toast } from "react-toastify"
 import { useNavigate ,useLocation} from "react-router-dom";
@@ -64,6 +11,7 @@ export default function Login() {
   const { checkAuth } = useAuth();
   const location = useLocation();
   const from = location.state?.from|| "/";
+  
 
   const [errors, setErrors] = useState({
     email:"",
@@ -82,15 +30,21 @@ export default function Login() {
     try {
       const response = await loginUser(formData);
       await checkAuth();
-      console.log(response.message);
+    
       setFormData({
         email: "",
         password: ""
       });
-      console.log("from",from);
+         console.log("role",response.data.role);
+      if(response.data.role==="admin"){
+        console.log("dashboard");
+        navigate("/admin/dashboard", {replace: true});
+        return
+      }
       navigate(from, { replace: true });
 
     } catch (err) {
+      console.log(err);
       const errData = getErrorData(err);
       //field error
       if(errData.errors){

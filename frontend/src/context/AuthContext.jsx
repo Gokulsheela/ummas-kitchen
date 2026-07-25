@@ -4,8 +4,8 @@ import {
     useEffect,
     useState
 } from "react";
-import { getCurrentUser } from "../features/auth/api";
-import { logoutUser } from "../features/auth/api";
+import { getCurrentUser } from "../features/auth/api/authApi";
+import { logoutUser } from "../features/auth/api/authApi";
 import { Navigate, useNavigate } from "react-router-dom";
 const AuthContext = createContext();
  export function AuthProvider({children}) {
@@ -41,6 +41,7 @@ const AuthContext = createContext();
         setUser,
         loading,
         isAuthenticated: !!user,
+        isAdmin:user?.role==="admin",
         checkAuth,
         logout
     };

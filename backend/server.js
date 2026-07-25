@@ -5,11 +5,11 @@ const app=express();
 const mongoose=require("mongoose");
 const path = require("path");
 
-const user = require("./models/auth/userModel.js");
-const product = require("./models/productModel.js");
+
 
 const productRouter = require("./routes/productRoutes.js")
 const authRouter = require("./routes/authRoutes.js")
+const cartRouter = require("./routes/cartRoutes.js");
 
 const cors=require ("cors");
 const cookieParser = require("cookie-parser");
@@ -61,6 +61,7 @@ app.get("/", (req, res) => {
 
  app.use("/",productRouter);
  app.use("/auth",authRouter);
+ app.use("/cart",cartRouter);
 
 
 
@@ -115,6 +116,9 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
+
+
 
 app.listen(3000,()=>{
     console.log('Server is running on port 3000');

@@ -1,4 +1,4 @@
-import useBottomNavVisibility from "../../../../hooks/useBottomNavVisibility";
+import useBottomNavVisibility from "../../hooks/useBottomNavVisibility";
 
 import {
   House,

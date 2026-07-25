@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createProductCategory } from "../api";
+import { createProductCategory } from "../api/categoryApi";
 
 export default function NewCategoryForm() {
   const [formData, setFormData] = useState({

@@ -59,7 +59,7 @@
 
 
 import { useState } from "react";
-import { createSignupUser } from "../api.js";
+import { createSignupUser } from "../api/authApi.js";
 import { toast } from "react-toastify";
 import { getErrorData } from "../../../utils/errorMessage.js";
 import { useNavigate } from "react-router-dom";

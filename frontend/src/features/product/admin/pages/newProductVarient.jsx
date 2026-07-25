@@ -1,35 +1,40 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState ,useEffect} from "react";
+import { getProducts,createProductVariant } from "../api/productApi";
+import axiosClient from "../../../../api/axiosClient";
 
-const products = [
-  {
-    _id: "1",
-    title: "Oversized Black T-Shirt",
-    category: "Men > T-Shirts",
-  },
-  {
-    _id: "2",
-    title: "Cotton Hoodie",
-    category: "Men > Hoodies",
-  },
-  {
-    _id: "3",
-    title: "Kids Sweatshirt",
-    category: "Kids > Sweatshirts",
-  },
-];
 
-export default function newProductVariantForm() {
+export default function NewProductVariantForm() {
+  const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [formData, setFormData] = useState({
     sku: "",
-    color: "",
     size: "",
-    originalPrice: "",
-    salePrice: "",
+    price: {
+      original:"",
+      sale:"",
+      currency:"INR"
+    },
+
     stockQuantity: "",
   });
+
+  useEffect(()=>{
+    
+          const fetchProducts = async()=> {
+              try{
+  
+                   const products = await getProducts();
+                   setProducts(products);
+                console.log("products",products);
+              }
+              catch(error){
+                  console.log(error);
+              }   
+          }
+          fetchProducts();
+      },[]);
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) =>
@@ -44,7 +49,7 @@ export default function newProductVariantForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!selectedProduct) {
@@ -56,8 +61,9 @@ export default function newProductVariantForm() {
       productId: selectedProduct._id,
       ...formData,
     };
+    const res = await createProductVariant(payload);
 
-    console.log(payload);
+    console.log("payload",payload);
   };
 
   return (
@@ -154,19 +160,7 @@ export default function newProductVariantForm() {
             />
           </div>
 
-          <div>
-            <label className="mb-2 block font-medium">
-              Color
-            </label>
-
-            <input
-              type="text"
-              name="color"
-              value={formData.color}
-              onChange={handleChange}
-              className="w-full rounded-lg border p-3"
-            />
-          </div>
+          
 
           <div>
             <label className="mb-2 block font-medium">
@@ -195,8 +189,16 @@ export default function newProductVariantForm() {
             <input
               type="number"
               name="originalPrice"
-              value={formData.originalPrice}
-              onChange={handleChange}
+              value={formData.price.original}
+              onChange={(e)=> {
+                setFormData({
+                  ...formData,
+                    price:{
+                      ...formData.price,
+                        original:e.target.value
+                    }
+                })
+              }}
               className="w-full rounded-lg border p-3"
             />
           </div>
@@ -209,8 +211,16 @@ export default function newProductVariantForm() {
             <input
               type="number"
               name="salePrice"
-              value={formData.salePrice}
-              onChange={handleChange}
+              value={formData.price.sale}
+              onChange={(e)=> {
+                setFormData({
+                  ...formData,
+                  price:{
+                    ...formData.price,
+                    sale:e.target.value
+                  }
+                })
+              }}
               className="w-full rounded-lg border p-3"
             />
           </div>

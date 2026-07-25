@@ -1,6 +1,7 @@
 const product2 = require("../models/product/product.model.js");
 const catagory = require("../models/product/category.model.js");
 const product = require("../models/product/product.model.js");
+const productVariant = require ("../models/product/productVariant.model.js");
 const ExpressError = require("../utils/ExpressError.js");
 
 module.exports. getCategory = (async (req,res) => {
@@ -81,21 +82,36 @@ module.exports.new = (async(req,res)=>{
     console.log(newProduct);
    await newProduct.save();
   
-    res.status(201).json({ 
+    r
+    es.status(201).json({ 
         sucess: true,
         message: "Product saved successfully" });
 
 });
 
+module.exports.createProductVariant = (async (req,res)=>{
+        console.log("--product variant",req.body);
+        const item = new productVariant(req.body);
+       await item.save();
+       res.status(201).json({
+        sucess: true,
+        message: "Product saved successfully" 
+       })
+
+})
+
 module.exports.showProduct = (async(req,res)=> {
     const { id } = req.params;
     const item = await product.findById(id) ;
+    const variant = await productVariant.find({productId:id}); 
+
     if(!item){
         throw new ExpressError(404,"Product Not Found");
     }
     res.status(200).json({
         sucess : true,
-        data : item
+        data : item, variant
+               
     });
 })
 

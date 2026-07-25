@@ -45,6 +45,7 @@ export default function ProductDetails() {
           }).format(selectedVariant?.price.sale || productInfo.variant[0].price.sale);
 
          const AddToBag= async () => {
+          console.log("add too bag")
             if (addingToBag) return;
                setAddingToBag(true);
 
@@ -53,14 +54,17 @@ export default function ProductDetails() {
                   
                   if (!selectedVariant) {
                   toast.error("Please select a sizet.");
+                  
                   return;
                 }
                    const payload = {
                     variantId: selectedVariant._id,
                     quantity: 1
                 };
+                console.log("PAYLOAD",payload);
                 await addToCart(payload);
                 toast.success("Added to bag");
+                navigate("/cart");
 
               } catch (err) {
                   console.error(err);
@@ -186,7 +190,7 @@ export default function ProductDetails() {
 
     {/* Sticky Add To Bag Button */}
     <div className=" left-0 right-0 bg-white p-4">
-      <Link to={`/cart`}>
+    
         <button
             disabled={!selectedVariant}
             className={`w-full py-2 rounded border border-black text-white text-lg font-semibold ${
@@ -194,9 +198,10 @@ export default function ProductDetails() {
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-black text-white"
             }`}
+            onClick={AddToBag}
         > Add to Cart
         </button>
-      </Link>
+ 
       
     </div>
     <BottomNav/>

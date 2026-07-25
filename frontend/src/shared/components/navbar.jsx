@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; 
 import { toast } from "react-toastify";
-import { logoutUser } from "../../features/auth/api";
+import { logoutUser } from "../../features/auth/api/authApi";
 import { useAuth } from "../../context/AuthContext";
 export default function Navbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { logout, user } = useAuth();
+  const { logout, user ,isAdmin,isAuthenticated} = useAuth();
   const toggelMenu = ()=> setMenuOpen(!menuOpen);
   const handelItemClicked = ()=> setMenuOpen(false);
   const cartCount = 2;
 
-  console.log("user",user);
+  console.log("user",isAdmin);
 
   const handleLogut = async ()=>{
     try{
@@ -35,17 +35,27 @@ export default function Navbar() {
 
           {/* Logo */}
           <div className="text-xl font-semibold tracking-wide">
-            <Link to="/" className="hover:text-black">Umma's Kitchen</Link>
+            <Link to="/products" className="hover:text-black">Umma's Kitchen</Link>
           </div>
 
           {/* Desktop links */}
+
           <div className="hidden md:flex space-x-6 text-sm">
-            <Link to="/new" className="hover:text-black">NewListing</Link>
-            <button className="hover:text-black"
+            {isAdmin && (
+              <Link to="/admin/dashboard" className="hover:text-black">Dash Board</Link>
+            )}
+            {isAuthenticated && (
+                <button className="hover:text-black"
               onClick={handleLogut}
             >Logut</button>
-            <Link to="/signup" className="hover:text-black">SignUp</Link>
+            )}
+            {!isAuthenticated && (
+              <>
+                  <Link to="/signup" className="hover:text-black">SignUp</Link>
             <Link to="/login" className="hover:text-black">Login</Link>
+              </>
+            )}
+            
           </div>
 
           {/* Actions */}
@@ -92,9 +102,21 @@ export default function Navbar() {
               placeholder="Search products"
               className="w-full border rounded-md px-3 py-2"
             />
-            <Link to="/new" className="block" onClick={handelItemClicked}>NewListing</Link>
-            <Link to="/signup" className="block" onClick={handelItemClicked}>SignUp</Link>
+            {isAdmin && (
+                <Link to="/admin/dashboard" className="block" onClick={handelItemClicked}>Dash Board</Link>
+            )}
+            {!isAuthenticated && (
+              <>
+                <Link to="/signup" className="block" onClick={handelItemClicked}>SignUp</Link>
             <Link to="/login" className="block" onClick={handelItemClicked}>Login</Link>
+              </>
+            )}
+            {isAuthenticated && (
+              <button className="hover:text-black"
+              onClick={handleLogut}
+            >Logut</button>
+            )}
+            
             <a className="block">Women</a>
           </div>
         )}

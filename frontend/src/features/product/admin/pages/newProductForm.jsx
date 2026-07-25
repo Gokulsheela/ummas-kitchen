@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createProduct } from "../api";
+import { createProduct } from "../api/productApi";
 
 export default function NewProductForm() {
   const [formData, setFormData] = useState({

@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const priceSchema = require("../../schemas/price.schema");
 
 const productVariantSchema = new Schema(
     {
         productId : {
             type: Schema.Types.ObjectId,
-            ref: "Products",
+            ref: "product",
             required: true,
             index: true
         },
@@ -18,7 +19,6 @@ const productVariantSchema = new Schema(
         },
         color: {
             type: String,
-            required: String,
             trim: true
         },
         size: {
@@ -27,9 +27,9 @@ const productVariantSchema = new Schema(
             trim: true
         },
 
-        // price: priceSchema,
+        price: priceSchema,
 
-        stockQunanity: {
+       stockQuantity: {
             type: Number,
             default: 0,
             min: 0
