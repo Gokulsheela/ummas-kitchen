@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
+const addressSchema = require("../../schemas/address.schema");
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -20,6 +21,8 @@ const userSchema = new mongoose.Schema({
         enum: ["customer", "admin"],
         default: "customer"
     },
+    address:[addressSchema],
+    
     isVerified: {
         type: Boolean,
         default: false

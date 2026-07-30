@@ -1,5 +1,6 @@
 const Cart = require("../models/cart/cart.model.js");
 const Variant = require("../models/product/productVariant.model.js");
+const Order = require("../models/order/order.model.js");
 
 module.exports.addToCart =async (req,res) => {
     console.log(req.body);
@@ -130,4 +131,56 @@ module.exports.updateCartQuantity= async (req,res) => {
         });
 
     }
+module.exports.checkout = async(req,res) =>{
+    const { items} = req.body;
 
+    if (!items || items.length === 0) {
+        throw new ExpressError("No items selected for checkout.", 400);
+    }
+
+    const cartData = await Promise.all(
+    items.map(async (item) => {
+        return await Variant.findById(item.variantId)
+            .populate("productId");
+    })
+);
+    
+        const orderItems = cartData.map((item) => ({
+            productId: item.productId._id,
+            // variantId: item.variant._id,
+
+            title: item.variant.productId.title,
+            thumbnail: item.variant.productId.thumbnail,
+
+            sku: item.variant.sku,
+            color: item.variant.color,
+            size: item.variant.size,
+
+            cartQuantity: item.cartQuantity,
+
+            price: {
+                original: item.variant.price.original,
+                sale: item.variant.price.sale,
+                currency: item.variant.price.currency
+            },
+
+            subtotal:
+                item.variant.price.sale * item.cartQuantity
+        }));
+
+         const totalAmount = orderItems.reduce(
+            (total, item) => total + item.subtotal,
+            0
+        );
+
+        const order = await Order.create({
+            user: req.user.id,
+            orderItem: orderItems,
+            totalAmount
+        });
+        
+    res.status(201).json({
+        success: true,
+        data: order
+    });
+}

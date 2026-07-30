@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { getCartItem,
-     deleteCartItem,
-      updateCartQuantity,
+         deleteCartItem,
+        updateCartQuantity,
+        checkout,
+
      } from "../api/cartApi";
 
 import CartItem from "./CartItem";
@@ -40,7 +42,7 @@ const  updateQuantity = async(id, qty)=> {
             selected: item.selected ?? true,
             })),
         });
-        console.log(cartItem);
+        
     }
         
 
@@ -51,9 +53,9 @@ const  updateQuantity = async(id, qty)=> {
         const res =  await deleteCartItem(id);
             
 
-        setCartItem(res => ({
-        ...res,
-        items: res.items.filter(
+        setCartItem(prev => ({
+        ...prev,
+        items: prev.items.filter(
             item => item.variant._id !== id
         )
         }));
@@ -70,7 +72,23 @@ const  updateQuantity = async(id, qty)=> {
                 : item
         ),
     }));
-}
+    }
+    const handleCheckout = async()=> {
+        console.log(cartItem);
+        const orderItems = cartItem.items
+        .filter(
+            item => item.selected=== true
+        )
+        .map(item=>({
+            variantId: item.variant._id,
+            cartQuantity: item.cartQuantity
+        }));
+       
+
+        const res = await checkout(orderItems);
+        console.log(res);
+    }
+
    return ( 
     <>
         <h1> My Shopping Bag</h1>
@@ -87,5 +105,9 @@ const  updateQuantity = async(id, qty)=> {
             />
           ))}
         </div> }
+        <button className = "w-full py-2 rounded  bg-black text-white text-lg font-semibold "
+        onClick={handleCheckout}
+        >
+            CHECK OUT</button>
         </>
     )}

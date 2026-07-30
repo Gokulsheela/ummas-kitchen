@@ -21,3 +21,8 @@ export const deleteCartItem = async (id) => {
     
     return res.data;
 };
+    export const checkout = async(orderItems) => {
+        console.log(orderItems);
+        const res = await axiosClient.post(`/cart/checkout`,{items: orderItems});
+        return res.data;
+    }
